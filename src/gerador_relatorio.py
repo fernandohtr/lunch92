@@ -25,7 +25,7 @@ def abre_arquivo_txt(caminho_arquivo: str) -> str:
 
 def obtem_pedidos_mes(arquivo: str, mes: int, ano: int) -> List[tuple]:
     regex_data = _ajusta_formatacao_data(arquivo[:50], mes, ano)
-    
+
     regex = (
         rf'^{regex_data}'  # data
         r',? \d+:\d+.+?: *'
