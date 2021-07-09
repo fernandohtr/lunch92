@@ -130,3 +130,7 @@ pip-selfcheck.json
 
 
 # End of https://www.gitignore.io/api/python
+
+# Ignore output and input files
+almoco.txt
+relatorio_*
