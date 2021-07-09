@@ -1,6 +1,6 @@
 import unittest
 
-from src import run
+from src import gerador_relatorio
 
 
 def obtem_fixture(nome_arquivo):
