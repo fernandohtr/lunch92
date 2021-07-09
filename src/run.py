@@ -15,9 +15,9 @@ VALORES_MARMITA = {
 def gera_relatorio() -> None:
     arquivo = abre_arquivo_txt()
     pedidos_mes = obtem_pedidos_mes(arquivo, args.mes, args.ano)
-    dados_organizados = obtem_dados_organizados(pedidos_mes)
-    imprime_relatorio(dados_organizados)
-    grava_dados_em_csv(dados_organizados)
+    dados_sanitizados = sanitiza_dados(pedidos_mes)
+    imprime_relatorio(dados_sanitizados)
+    grava_dados_em_csv(pedidos_mes)
 
 
 def abre_arquivo_txt() -> str:
@@ -40,49 +40,50 @@ def obtem_pedidos_mes(arquivo: str, mes: int, ano: int) -> List[tuple]:
     )
 
 
-def obtem_dados_organizados(pedidos_mes: List[tuple]) -> List[dict]:
-    dados_organizados = []
+def sanitiza_dados(pedidos_mes: List[tuple]) -> List[tuple]:
+    dados_sanitizados = []
 
     for pedido in pedidos_mes:
-        dados_pedidos = {
-            'Data': pedido[0],
-            'Nome': _obtem_nome(pedido[1]),
-            'Valor': _obtem_valor(pedido[2]),
-            'Quantidade': pedido[3]
-        }
+        dados_pedidos = (
+            pedido[0],
+            _sanitiza_nome(pedido[1]),
+            _converte_valor(pedido[2]),
+            pedido[3],
+        )
 
-        dados_organizados.append(tuple(dados_pedidos.values()))
-    return dados_organizados
+        dados_sanitizados.append(dados_pedidos)
+    return dados_sanitizados
 
 
-def _obtem_nome(nome):
+def _sanitiza_nome(nome: str) -> str:
     nome = nome.strip().capitalize()
+    nome = re.sub(r'(?:\.|:|,)', '', nome)
     
-    def _remove_acentos(texto):
+    def _remove_acentos(texto: str) -> str:
         return normalize('NFKD', texto).encode('ASCII', 'ignore').decode('ASCII')
 
     return _remove_acentos(nome)
 
 
-def _obtem_valor(tamanho: str) -> str:
+def _converte_valor(tamanho: str) -> str:
     return VALORES_MARMITA.get(tamanho.strip()[0].lower())
 
 
-def imprime_relatorio(dados_organizados: List[tuple]) -> None:
-    for pedido in dados_organizados:
+def imprime_relatorio(dados_sanitizados: List[tuple]) -> None:
+    for pedido in dados_sanitizados:
         print(pedido)
     print('-' * 30)
-    print(f'TOTAL DE PEDIDOS: {len(dados_organizados)}')
+    print(f'TOTAL DE PEDIDOS: {len(dados_sanitizados)}')
 
 
 
-def grava_dados_em_csv(dados_organizados: List[dict]) -> None:
+def grava_dados_em_csv(dados_sanitizados: List[dict]) -> None:
     with open(f'relatorio_almoco_{args.ano}_{args.mes}.csv', 'w') as arquivo_csv:
         colunas = ['Data', 'Nome', 'Valor', 'Quantidade']
 
         saida_csv = csv.writer(arquivo_csv, delimiter=',', lineterminator='\n')
         saida_csv.writerow(colunas)
-        for linha in dados_organizados:
+        for linha in dados_sanitizados:
             saida_csv.writerow(linha)
 
 
