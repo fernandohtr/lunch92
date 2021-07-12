@@ -15,7 +15,7 @@ def gera_relatorio(mes: int, ano: int, caminho_arquivo: str) -> None:
     pedidos_mes = obtem_pedidos_mes(arquivo, mes, ano)
     dados_sanitizados = sanitiza_dados(pedidos_mes)
     imprime_relatorio(dados_sanitizados)
-    grava_dados_em_csv(mes, ano, pedidos_mes)
+    grava_dados_em_csv(mes, ano, dados_sanitizados)
 
 
 def abre_arquivo_txt(caminho_arquivo: str) -> str:
@@ -44,7 +44,7 @@ def _ajusta_formatacao_data(texto: str, mes: int, ano: int) -> str:
     """Ao gerar o relatório de conversas do whatsapp, a data pode vir com a
        formatação:
        - longa: DD/MM/YYYY; ou
-       - curta: MM/DD/YYY
+       - curta: MM/DD/YY
     """
     data_formatacao_longa = re.search(r'\d{2}/\d{2}/\d{4} \d{2}:\d{2}', texto, re.M)
     if data_formatacao_longa:
