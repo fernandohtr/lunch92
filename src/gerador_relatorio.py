@@ -5,7 +5,7 @@ from typing import List
 from unicodedata import normalize
 
 VALORES_MARMITA = {
-    'p': '10',
+    'p': '9',
     'g': '12'
 }
 
