@@ -5,8 +5,8 @@ from typing import List
 from unicodedata import normalize
 
 VALORES_MARMITA = {
-    'p': '8',
-    'g': '10'
+    'p': '9',
+    'g': '12'
 }
 
 
@@ -41,8 +41,7 @@ def obtem_pedidos_mes(arquivo: str, mes: int, ano: int) -> List[tuple]:
 
 
 def _ajusta_formatacao_data(texto: str, mes: int, ano: int) -> str:
-    """Ao gerar o relatório de conversas do whatsapp, a data pode vir com a
-       formatação:
+    """Ao gerar o relatório de conversas do whatsapp, a data pode vir com a formatação:
        - longa: DD/MM/YYYY; ou
        - curta: MM/DD/YY
     """

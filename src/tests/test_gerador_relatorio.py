@@ -21,13 +21,13 @@ class Lauch92TestCase(unittest.TestCase):
         self.assertEqual('Pikachu', gerador_relatorio._sanitiza_nome(nome))
 
     def test_converte_valor(self):
-        self.assertEqual('10', gerador_relatorio._converte_valor('Grande'))
-        self.assertEqual('8', gerador_relatorio._converte_valor('Pequeno'))
+        self.assertEqual('12', gerador_relatorio._converte_valor('Grande'))
+        self.assertEqual('9', gerador_relatorio._converte_valor('Pequeno'))
 
     def test_sanitiza_dados_com_erro_de_padrão(self):
         pedidos_mes = [('6/30/21', 'Ca.terpie:', 'Grande', '2')]
         dados_sanitizados = gerador_relatorio.sanitiza_dados(pedidos_mes)
-        valor_marmita = '10'
+        valor_marmita = '12'
 
         self.assertIn('Caterpie', dados_sanitizados[0])
         self.assertIn(valor_marmita, dados_sanitizados[0])
