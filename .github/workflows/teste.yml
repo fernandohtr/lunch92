@@ -1,6 +1,7 @@
-name: Teste
+name: CI
 
-on: [push]
+on:
+  push:
 
 jobs:
   test:
@@ -8,13 +9,14 @@ jobs:
     strategy:
       matrix:
         python-version: [ '3.x', 'pypy-3.6', 'pypy-3.7' ]
-    name: Python ${{ matrix.python-version }}: teste
+    name: "Python ${{ matrix.python-version }}: teste"
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Configura python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
           architecture: x64
-      - run: |
-        python -m unittest src/tests/test_gerador_relatorio.py
+      - name: Testa aplicação
+        run: python -m unittest src/tests/test_gerador_relatorio.py
