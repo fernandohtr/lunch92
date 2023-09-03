@@ -21,13 +21,17 @@ class Lauch92TestCase(unittest.TestCase):
         self.assertEqual('Pikachu', gerador_relatorio._sanitiza_nome(nome))
 
     def test_converte_valor(self):
-        self.assertEqual('12', gerador_relatorio._converte_valor('Grande'))
-        self.assertEqual('9', gerador_relatorio._converte_valor('Pequeno'))
+        self.assertEqual(12, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Grande', '1', '')))
+        self.assertEqual(9, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Pequeno', '1', '')))
+
+    def test_converte_valor_com_ovo(self):
+        self.assertEqual(14, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Grande', '1', ' beterraba,oVo, mandioca')))
+        self.assertEqual(11, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Pequeno', '1', ':ovo, beterraba, mandioca')))
 
     def test_sanitiza_dados_com_erro_de_padrão(self):
-        pedidos_mes = [('6/30/21', 'Ca.terpie:', 'Grande', '2')]
+        pedidos_mes = [('6/30/21', 'Ca.terpie:', 'Grande', '2', ': tropeiro, arroz, batatinha ensopada')]
         dados_sanitizados = gerador_relatorio.sanitiza_dados(pedidos_mes)
-        valor_marmita = '12'
+        valor_marmita = 12
 
         self.assertIn('Caterpie', dados_sanitizados[0])
         self.assertIn(valor_marmita, dados_sanitizados[0])
@@ -44,3 +48,17 @@ class Lauch92TestCase(unittest.TestCase):
             '(\\d{2}/06/2021)',
             gerador_relatorio._ajusta_formatacao_data(conversa_data_longa, 6, 21)
         )
+
+    def test_verifica_se_tem_ovo_encontra_ovo(self):
+        pedido_comida = ': tropeiro, arroz, batatinha ensopada, churrasco, beterraba, mandioca, ovo'
+        tem_ovo = gerador_relatorio._verifica_se_tem_ovo(pedido_comida)
+        self.assertTrue(tem_ovo)
+
+    def test_verifica_se_tem_ovo_nao_encontra_ovo(self):
+        pedido_comida = ': tropeiro, arroz, batatinha ensopada, churrasco, beterraba, mandioca'
+        nao_tem_ovo = gerador_relatorio._verifica_se_tem_ovo(pedido_comida)
+        self.assertFalse(nao_tem_ovo)
+
+
+if __name__ == '__main__':
+    unittest.main()
