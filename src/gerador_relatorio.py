@@ -8,8 +8,8 @@ from unicodedata import normalize
 Dados_Pedidos = namedtuple('Dados_Pedidos', ['data', 'nome', 'valor', 'quantidade'])
 
 VALORES_MARMITA = {
-    'p': 9,
-    'g': 12,
+    'p': 10,
+    'g': 14,
     'ovo': 2,
 }
 
