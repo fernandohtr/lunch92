@@ -24,9 +24,17 @@ class Lauch92TestCase(unittest.TestCase):
         self.assertEqual(14, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Grande', '1', '')))
         self.assertEqual(10, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Pequeno', '1', '')))
 
+    def test_converte_valor_com_extras(self):
+        self.assertEqual(18, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Grande', '1', 'churrasco e ovo')))
+        self.assertEqual(14, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Pequeno', '1', 'ovo e churrasco')))
+
     def test_converte_valor_com_ovo(self):
         self.assertEqual(16, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Grande', '1', ' beterraba,oVo, mandioca')))
         self.assertEqual(12, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Pequeno', '1', ':ovo, beterraba, mandioca')))
+
+    def test_converte_valor_com_churrasco(self):
+        self.assertEqual(16, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Grande', '1', ' beterraba,churrasco, mandioca')))
+        self.assertEqual(12, gerador_relatorio._converte_valor(('6/30/21', 'Caterpie:', 'Pequeno', '1', ':Churrasco, beterraba, mandioca')))
 
     def test_sanitiza_dados_com_erro_de_padrão(self):
         pedidos_mes = [('6/30/21', 'Ca.terpie:', 'Grande', '2', ': tropeiro, arroz, batatinha ensopada')]
@@ -58,6 +66,16 @@ class Lauch92TestCase(unittest.TestCase):
         pedido_comida = ': tropeiro, arroz, batatinha ensopada, churrasco, beterraba, mandioca'
         nao_tem_ovo = gerador_relatorio._verifica_se_tem_ovo(pedido_comida)
         self.assertFalse(nao_tem_ovo)
+
+    def test_verifica_se_tem_churrasco_encontra_ovo(self):
+        pedido_comida = ': tropeiro, arroz, batatinha ensopada, churrasco, beterraba, mandioca, ovo'
+        tem_churrasco = gerador_relatorio._verifica_se_tem_churrasco(pedido_comida)
+        self.assertTrue(tem_churrasco)
+
+    def test_verifica_se_tem_churrasco_nao_encontra_churrasco(self):
+        pedido_comida = ': tropeiro, arroz, batatinha ensopada, ovo, beterraba, mandioca'
+        nao_tem_churrasco = gerador_relatorio._verifica_se_tem_churrasco(pedido_comida)
+        self.assertFalse(nao_tem_churrasco)
 
 
 if __name__ == '__main__':

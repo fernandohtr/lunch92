@@ -11,6 +11,7 @@ VALORES_MARMITA = {
     'p': 10,
     'g': 14,
     'ovo': 2,
+    'churrasco': 2,
 }
 
 
@@ -84,11 +85,18 @@ def _sanitiza_nome(nome: str) -> str:
 def _converte_valor(pedido: tuple) -> str:
     tamanho = pedido[2]
     tem_ovo = VALORES_MARMITA.get('ovo') if _verifica_se_tem_ovo(pedido[4]) else 0
-    return VALORES_MARMITA.get(tamanho.strip()[0].lower()) + tem_ovo
+    tem_churrasco = VALORES_MARMITA.get('churrasco') if _verifica_se_tem_churrasco(pedido[4]) else 0
+    return VALORES_MARMITA.get(tamanho.strip()[0].lower()) + tem_ovo + tem_churrasco
 
 
 def _verifica_se_tem_ovo(comida: str) -> bool:
-    regex = r'\W[Oo][Vv][Oo]'
+    regex = r'(?<!\w)[Oo][Vv][Oo]'
+    match = re.search(regex, comida)
+    return bool(match)
+
+
+def _verifica_se_tem_churrasco(comida: str) -> bool:
+    regex = r'(?<!\w)[Cc]hurrasco'
     match = re.search(regex, comida)
     return bool(match)
 
